@@ -134,6 +134,12 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
 
+        from sqlalchemy import inspect
+        # Check if the Player table exists
+        inspector = inspect(db.engine)
+        if not inspector.has_table('player'):
+            print("Table 'player' does not exist! Something went wrong during initialization.")
+
         if Player.query.count() == 0:
             initial_players = ["Tarald", "Lars", "Aleksandra", "Jonas", "Dan Ove"]
             for player_name in initial_players:
