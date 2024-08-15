@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+</head>
+<body>
+    <h1>Dropdown Selector</h1>
+    <form method="POST">
+        <select name="selection">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+        </select>
+        <button type="submit">Add to List</button>
+    </form>
+
+    <h2>Items in List:</h2>
+    <ul>
+        {% for item in items %}
+        <li>{{ item.value }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
