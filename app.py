@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')  # Use non-GUI backend
 import io
 import base64
 
@@ -15,8 +15,8 @@ db = SQLAlchemy(app)
 class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
-    rating = db.Column(db.Integer, nullable=False, default=1000)
-    history = db.Column(db.String(5000), nullable=False, default='1000')
+    rating = db.Column(db.Integer, nullable=False, default=1500)
+    history = db.Column(db.String(5000), nullable=False, default='1500')
 
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -35,15 +35,15 @@ def index():
     # Get all players sorted by rating
     players = Player.query.order_by(Player.rating.desc()).all()
 
-    # Get the last 5 matches
-    last_5_matches = Match.query.order_by(Match.id.desc()).limit(5).all()
+    # Get all matches
+    all_matches = Match.query.order_by(Match.id.desc()).all()
 
     # Create ELO chart
     elo_chart = generate_elo_chart(players)
 
-    return render_template('index.html', players=players, matches=last_5_matches, elo_chart=elo_chart)
+    return render_template('index.html', players=players, matches=all_matches, elo_chart=elo_chart)
 
-def calculate_elo(winner, loser, k=32):
+def calculate_elo(winner, loser, k=64):
     expected_winner = 1 / (1 + 10 ** ((loser.rating - winner.rating) / 400))
     expected_loser = 1 / (1 + 10 ** ((winner.rating - loser.rating) / 400))
 
@@ -133,12 +133,6 @@ def generate_elo_chart(players):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-
-        from sqlalchemy import inspect
-        # Check if the Player table exists
-        inspector = inspect(db.engine)
-        if not inspector.has_table('player'):
-            print("Table 'player' does not exist! Something went wrong during initialization.")
 
         if Player.query.count() == 0:
             initial_players = ["Tarald", "Lars", "Aleksandra", "Jonas", "Dan Ove"]

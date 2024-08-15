@@ -102,7 +102,7 @@ a:hover {
 }
 
 .elo-positive {
-    color: rgb(55, 255, 55);
+    color: #9aff8d;
     font-weight: bold;
 }
 .elo-negative {
@@ -111,9 +111,22 @@ a:hover {
 }
 
 
+
+.player-name {
+    display: inline-block;
+    width: 120px; /* Adjust this width to fit the longest name */
+    text-align: left; /* Align names to the left */
+}
+
+.elo-result {
+    min-width: 60px;
+    text-align: right;
+}
+
 .match-history {
     max-height: 200px;
     overflow-y: auto;
+    font-family: monospace; /* Ensure consistent spacing */
 }
 
 .match-history li {

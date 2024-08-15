@@ -7,14 +7,7 @@
     <title>Elo Ranking System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
-        .elo-positive {
-            color: green;
-            font-weight: bold;
-        }
-        .elo-negative {
-            color: red;
-            font-weight: bold;
-        }
+        
         .match-history li {
             display: flex;
             justify-content: space-between;
@@ -69,7 +62,7 @@
             </form>
         </div>
 
-        <div class="section" id="match-history">
+        <!-- <div class="section" id="match-history">
             <h2>Match History</h2>
             <ul class="match-history">
                 {% for match in matches %}
@@ -85,7 +78,28 @@
                 </li>
                 {% endfor %}
             </ul>
+        </div> -->
+        <div class="section" id="match-history">
+            <h2>Match History</h2>
+            <ul class="match-history">
+                {% for match in matches %}
+                <li>
+                    <span class="player-name">{{ match.player1.name }}</span>
+                    <span>&nbsp;v&nbsp;</span>
+                    <span class="player-name">{{ match.player2.name }}</span>
+                    <span class="elo-result {% if match.winner == match.player1 %}elo-positive{% else %}elo-negative{% endif %}">
+                        {% if match.winner == match.player1 %}
+                            (+{{ match.elo_change_winner }})
+                        {% else %}
+                            ({{ match.elo_change_loser }})
+                        {% endif %}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
+
+
     </div>
 
     <script>
