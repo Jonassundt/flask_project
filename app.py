@@ -93,8 +93,6 @@ def add_match():
 def generate_elo_chart(players):
     plt.figure(figsize=(7, 4))  # Adjust the size for better fit
 
-    # Use a custom dark theme with a slightly lighter background
-    # plt.style.use('grey_background')
     plt.style.use('ggplot')
     plt.rcParams.update({
         'axes.facecolor': '#2c2f33',
@@ -107,11 +105,18 @@ def generate_elo_chart(players):
     })
 
     for player in players:
-        history = list(map(int, player.history.split(',')))
-        plt.plot(range(1, len(history) + 1), history, label=player.name)
+        # Ensure players with no games played start with a history of [1500]
+        if player.history.strip() == '' or player.history == '1500':
+            history = [1500]
+            x_values = [0]  # Start with 0 games played
+        else:
+            history = list(map(int, player.history.split(',')))
+            x_values = range(len(history))  # Adjust x-values accordingly
+
+        plt.plot(x_values, history, label=player.name)
 
         # Adding marker only for the last data point
-        plt.plot(len(history), history[-1], 'o', markersize=8)  # Marker for last data point
+        plt.plot(x_values[-1], history[-1], 'o', markersize=8)  # Marker for last data point
 
     plt.xlabel('Games Played', color='white')
     plt.ylabel('ELO Rating', color='white')
